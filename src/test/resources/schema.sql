@@ -1,0 +1,9 @@
+CREATE SCHEMA bookmeup;
+
+CREATE TABLE book (
+id INTEGER DEFAULT 0,
+name VARCHAR (255) DEFAULT '',
+author VARCHAR (255) DEFAULT '',
+rating smallint DEFAULT 0,
+PRIMARY KEY (id)
+);
