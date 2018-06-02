@@ -19,6 +19,23 @@ public class BookDAOTest extends AbstractTest {
         bookEntity.setRating(5);
         bookEntity.setAuthor("Marek");
         bookEntity.setName("Marek´s Fantastische Reisen");
+        entityManager.persist(bookEntity);
+
+        int id = bookEntity.getId();
+
+        bookEntity = bookDAO.getByKey(id);
+
+        Assert.assertEquals(bookEntity.getRating(), 5);
+        Assert.assertEquals(bookEntity.getAuthor(), "Marek");
+        Assert.assertEquals(bookEntity.getName(), "Marek´s Fantastische Reisen");
+    }
+
+    @Test
+    public void testSave(){
+        BookEntity bookEntity = new BookEntity();
+        bookEntity.setRating(5);
+        bookEntity.setAuthor("Marek");
+        bookEntity.setName("Marek´s Fantastische Reisen");
         bookDAO.save(bookEntity);
 
         int id = bookEntity.getId();
