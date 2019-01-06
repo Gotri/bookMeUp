@@ -1,4 +1,4 @@
-package customer;
+package bookmeup.customer;
 
 import org.springframework.data.repository.CrudRepository;
 
