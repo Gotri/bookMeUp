@@ -2,6 +2,7 @@ package customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,12 +14,17 @@ import java.util.List;
 @RequestMapping(path = "/customer")
 public class CustomerController {
 
-    @Autowired
-    CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    @GetMapping(path = "/")
-    public String index() {
-        return "Hello, this is the Web-Service to manage Customers";
+    @Autowired
+    public CustomerController(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @GetMapping(path = "/view")
+    public String customerView(Model model) {
+        model.addAttribute("customers", getAllCustomers());
+        return "customer";
     }
 
     @GetMapping(path = "/add")
