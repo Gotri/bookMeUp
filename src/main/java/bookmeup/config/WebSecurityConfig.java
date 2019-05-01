@@ -24,9 +24,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/registration").permitAll().antMatchers("/users/add").permitAll()
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/registration").permitAll()
+                .antMatchers("/users/add").permitAll()
+                .antMatchers("/users/current/").permitAll()
+                .antMatchers("/users/current/is/authenticated").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -64,5 +66,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService());
     }
-
 }

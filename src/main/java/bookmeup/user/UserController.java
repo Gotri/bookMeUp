@@ -1,6 +1,7 @@
 package bookmeup.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +39,20 @@ public class UserController {
     public @ResponseBody
     List<User> getByLastName(@PathVariable String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @GetMapping("/current")
+    public @ResponseBody
+    User getCurrentUser(Authentication authentication) {
+        if (isAuthenticated(authentication)) {
+            return userRepository.findByEmail(authentication.getName());
+        }
+        return null;
+    }
+
+    @GetMapping("/current/is/authenticated")
+    public @ResponseBody
+    boolean isAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated();
     }
 }
