@@ -17,4 +17,9 @@ public class HomeController {
     public String registrationView() {
         return "registration.html";
     }
+
+    @GetMapping("/myBooks")
+    public String userView() {
+        return "myBooks.html";
+    }
 }

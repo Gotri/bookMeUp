@@ -1,10 +1,9 @@
 package bookmeup.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -28,15 +27,22 @@ public class UserController {
         return "You successfully created your new account";
     }
 
-    @GetMapping("/all")
+    @GetMapping("/current")
     public @ResponseBody
-    Iterable<User> getAllCustomers() {
-        return userRepository.findAll();
+    UserModel getCurrentUser(Authentication authentication) {
+        if (isAuthenticated(authentication)) {
+            User user = userRepository.findByEmail(authentication.getName());
+            UserModel userModel = new UserModel();
+            userModel.setId(user.getId());
+            userModel.setUsername(user.getUsername());
+            return userModel;
+        }
+        return null;
     }
 
-    @GetMapping("/by/username/{username}")
+    @GetMapping("/current/is/authenticated")
     public @ResponseBody
-    List<User> getByLastName(@PathVariable String username) {
-        return userRepository.findByUsername(username);
+    boolean isAuthenticated(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated();
     }
 }
