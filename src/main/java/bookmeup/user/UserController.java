@@ -5,8 +5,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -29,23 +27,15 @@ public class UserController {
         return "You successfully created your new account";
     }
 
-    @GetMapping("/all")
-    public @ResponseBody
-    Iterable<User> getAllCustomers() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/by/username/{username}")
-    public @ResponseBody
-    List<User> getByLastName(@PathVariable String username) {
-        return userRepository.findByUsername(username);
-    }
-
     @GetMapping("/current")
     public @ResponseBody
-    User getCurrentUser(Authentication authentication) {
+    UserModel getCurrentUser(Authentication authentication) {
         if (isAuthenticated(authentication)) {
-            return userRepository.findByEmail(authentication.getName());
+            User user = userRepository.findByEmail(authentication.getName());
+            UserModel userModel = new UserModel();
+            userModel.setId(user.getId());
+            userModel.setUsername(user.getUsername());
+            return userModel;
         }
         return null;
     }

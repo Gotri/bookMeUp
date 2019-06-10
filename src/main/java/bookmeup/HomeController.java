@@ -18,8 +18,8 @@ public class HomeController {
         return "registration.html";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/myBooks")
     public String userView() {
-        return "users.html";
+        return "myBooks.html";
     }
 }
