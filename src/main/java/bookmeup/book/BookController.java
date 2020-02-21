@@ -15,30 +15,33 @@ public class BookController {
 
     private final UserController userController;
 
+    private final BookModelFactory bookModelFactory;
+
     @Autowired
-    public BookController(BookRepository bookRepository, UserController userController) {
+    public BookController(BookRepository bookRepository, UserController userController, BookModelFactory bookModelFactory) {
         this.bookRepository = bookRepository;
         this.userController = userController;
+        this.bookModelFactory = bookModelFactory;
     }
 
     @GetMapping("/by/id/{id}")
     public @ResponseBody
-    Book getById(@PathVariable Long id) {
+    BookModel getById(@PathVariable Long id) {
         if (bookRepository.findById(id).isPresent()) {
-            return bookRepository.findById(id).get();
+            return bookModelFactory.fromBook(bookRepository.findById(id).get());
         }
         return null;
     }
 
     @GetMapping("/by/user/{userId}")
     public @ResponseBody
-    List<Book> getByUserId(@PathVariable Long userId) {
-        return bookRepository.findByUserId(userId);
+    List<BookModel> getByUserId(@PathVariable Long userId) {
+        return bookModelFactory.fromBooks(bookRepository.findByUserId(userId));
     }
 
     @GetMapping("/by/user/current")
     public @ResponseBody
-    List<Book> getByCurrentUser(Authentication authentication) {
-        return bookRepository.findByUserId(userController.getCurrentUser(authentication).getId());
+    List<BookModel> getByCurrentUser(Authentication authentication) {
+        return bookModelFactory.fromBooks(bookRepository.findByUserId(userController.getCurrentUser(authentication).getId()));
     }
 }
