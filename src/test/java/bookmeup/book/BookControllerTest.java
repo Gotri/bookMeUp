@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -63,6 +64,13 @@ class BookControllerTest {
         assertThat(bookModel.getDescription(), is(book.getDescription()));
         assertThat(bookModel.getCoverReference(), is(book.getCoverReference()));
         assertThat(bookModel.getGenres(), is(book.getGenres()));
+    }
+
+    @Test
+    void getByIdShouldBeNull() {
+        when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+        BookModel bookModel = bookController.getById(1L);
+        assertThat(bookModel, is(nullValue()));
     }
 
     @Test

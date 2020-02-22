@@ -32,20 +32,24 @@ public class BookController {
     @GetMapping("/by/id/{id}")
     public @ResponseBody
     BookModel getById(@PathVariable Long id) {
-        LOGGER.info("Get Book by id: {}", id);
+        LOGGER.info("Getting book by id: {}", id);
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             BookModel bookModel = bookModelFactory.fromBook(book.get());
-            LOGGER.info("Got Book: {} for id: {}", bookModel, id);
+            LOGGER.info("Got Book: {} by id: {}", bookModel, id);
             return bookModel;
         }
+        LOGGER.info("No book found by id: {}", id);
         return null;
     }
 
     @GetMapping("/by/user/{userId}")
     public @ResponseBody
     List<BookModel> getByUserId(@PathVariable Long userId) {
-        return bookModelFactory.fromBooks(bookRepository.findByUserId(userId));
+        LOGGER.info("Getting books by userId: {}", userId);
+        List<BookModel> bookModels = bookModelFactory.fromBooks(bookRepository.findByUserId(userId));
+        LOGGER.info("Got books: {} by userId: {}", bookModels, userId);
+        return bookModels;
     }
 
     @GetMapping("/by/user/current")
