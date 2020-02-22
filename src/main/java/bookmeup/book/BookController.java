@@ -1,15 +1,20 @@
 package bookmeup.book;
 
 import bookmeup.user.UserController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
+
+    private final static Logger LOGGER = LogManager.getLogger(BookController.class);
 
     private final BookRepository bookRepository;
 
@@ -27,8 +32,12 @@ public class BookController {
     @GetMapping("/by/id/{id}")
     public @ResponseBody
     BookModel getById(@PathVariable Long id) {
-        if (bookRepository.findById(id).isPresent()) {
-            return bookModelFactory.fromBook(bookRepository.findById(id).get());
+        LOGGER.info("Get Book by id: {}", id);
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
+            BookModel bookModel = bookModelFactory.fromBook(book.get());
+            LOGGER.info("Got Book: {} for id: {}", bookModel, id);
+            return bookModel;
         }
         return null;
     }

@@ -19,7 +19,7 @@ public class BookModelFactory {
         bookModel.setShelves(book.getShelves());
         bookModel.setDescription(book.getDescription());
         bookModel.setCoverReference(book.getCoverReference());
-        bookModel.setGenres(book.getDescription());
+        bookModel.setGenres(book.getGenres());
         return bookModel;
     }
 
